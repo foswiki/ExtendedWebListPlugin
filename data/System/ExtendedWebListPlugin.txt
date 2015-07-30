@@ -39,10 +39,11 @@ If this plug-in is installed you should get a weblist below in bullet view
 ---++ Plugin Info
 
 |  Plugin Author(s): | Foswiki:Main.KennethLavrsen |
-|  Copyright: | &copy; 2008, Kenneth Lavrsen and Foswiki Contributors |
+|  Copyright: | &copy; 2008-2015, Kenneth Lavrsen and Foswiki Contributors |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
-|  Plugin Version: | 1.0 (10 Dec 2008) |
+|  Plugin Version: | 1.1 (30 Jul 2015) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  1.1 (30 Jul 2015) | Foswiki:Main.KennethLavrsen - Removed forgotten debug line that flooded debug log. Fixed a regex that could miss certain web names. Please don't perltidy my plugins again | 
 |  1.0 (10 Dec 2008) | Initial version. Plugin policy is feel free to modify in compatible way |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |

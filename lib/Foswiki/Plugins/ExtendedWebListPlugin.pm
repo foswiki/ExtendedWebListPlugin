@@ -13,6 +13,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #
 # For licensing info read LICENSE file in the Foswiki root.
+#<<<
 
 =pod
 
@@ -33,24 +34,23 @@ use strict;
 
 # $VERSION is referred to by Foswiki, and is the only global variable that
 # *must* exist in this package.
-use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $debug
-  $pluginName $NO_PREFS_IN_TOPIC
-);
+use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $debug 
+             $pluginName $NO_PREFS_IN_TOPIC
+           );
 
-# This should always be $Rev: 12445$ so that TWiki can determine the checked-in
+# This should always be $Rev: 1243 (10 Dec 2008) $ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
 # you should leave it alone.
-$VERSION = '$Rev: 12445$';
+$VERSION = '1.1';
 
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '1.0';
+$RELEASE = '1.1';
 
 # Short description of this plugin
 # One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
-$SHORTDESCRIPTION =
-'Extended Web List Plugin provides the ability to only show subwebs within current top web.';
+$SHORTDESCRIPTION = 'Extended Web List Plugin provides the ability to only show subwebs within current top web.';
 
 # You must set $NO_PREFS_IN_TOPIC to 0 if you want your plugin to use preferences
 # stored in the plugin topic. This default is required for compatibility with
@@ -97,12 +97,11 @@ FOOBARSOMETHING. This avoids namespace issues.
 =cut
 
 sub initPlugin {
-    my ( $topic, $web, $user, $installWeb ) = @_;
+    my( $topic, $web, $user, $installWeb ) = @_;
 
     # check for Plugins.pm versions
-    if ( $Foswiki::Plugins::VERSION < 1.026 ) {
-        Foswiki::Func::writeWarning(
-            "Version mismatch between $pluginName and Plugins.pm");
+    if( $Foswiki::Plugins::VERSION < 1.026 ) {
+        Foswiki::Func::writeWarning( "Version mismatch between $pluginName and Plugins.pm" );
         return 0;
     }
 
@@ -116,8 +115,7 @@ sub initPlugin {
 }
 
 sub _EXTENDEDWEBLIST {
-    my ( $session, $params, $theTopic, $theWeb ) = @_;
-
+    my($session, $params, $theTopic, $theWeb) = @_;
     # $session  - a reference to the TWiki session object (if you don't know
     #             what this is, just ignore it)
     # $params=  - a reference to a Foswiki::Attrs object containing parameters.
@@ -131,7 +129,7 @@ sub _EXTENDEDWEBLIST {
     # For example, %EXAMPLETAG{'hamburger' sideorder="onions"}%
     # $params->{_DEFAULT} will be 'hamburger'
     # $params->{sideorder} will be 'onions'
-
+    
     my $format = $params->{_DEFAULT} || $params->{'format'} || '$name';
     $format ||= '$name';
     my $separator = $params->{separator} || "\n";
@@ -148,54 +146,41 @@ sub _EXTENDEDWEBLIST {
 
     my @list = ();
     my @webslist = split( /,\s*/, $webs );
-
-    foreach my $aweb (@webslist) {
+      
+    foreach my $aweb ( @webslist ) {
         if ( $aweb eq 'public' ) {
             if ( $rootwebs eq 'on' ) {
-                my @sublist        = ();
-                my @templist       = ();
-                my @currentRootWeb = split( /\//, $showWeb );
-                push( @templist,
-                    Foswiki::Func::getListOfWebs( 'user,public,allowed', '' ) );
-                push(
-                    @sublist,
-                    Foswiki::Func::getListOfWebs(
-                        'user,public,allowed', $currentRootWeb[0]
-                    )
-                );
+                my @sublist = ();
+                my @templist = ();
+                my @currentRootWeb = split(/\//, $showWeb); 
+                push( @templist, Foswiki::Func::getListOfWebs( 'user,public,allowed', '' ) );
+                push( @sublist, Foswiki::Func::getListOfWebs( 'user,public,allowed', $currentRootWeb[0] ) );
 
-                foreach my $listitem (@templist) {
+                foreach my $listitem ( @templist ) {
                     if ( $listitem !~ /\// ) {
                         push( @list, $listitem );
-                        if ( $showWeb =~ /\b$listitem/ ) {
-                            push( @list, @sublist );
-                            Foswiki::Func::writeDebug("@list");
+                        if ( $showWeb  =~ /\b$listitem\b/ ) {
+                            push ( @list, @sublist );
                         }
-                    }
+                    }    
                 }
-
+                
             }
             else {
-                push(
-                    @list,
-                    Foswiki::Func::getListOfWebs(
-                        'user,public,allowed', $showWeb
-                    )
-                );
+                push( @list, Foswiki::Func::getListOfWebs( 'user,public,allowed', $showWeb ) );
             }
         }
         elsif ( $aweb eq 'webtemplate' ) {
-            push( @list,
-                Foswiki::Func::getListOfWebs( 'template,allowed', $showWeb ) );
+            push( @list, Foswiki::Func::getListOfWebs( 'template,allowed', $showWeb ) );
         }
         else {
-            push( @list, $aweb ) if ( Foswiki::Func::webExists($aweb) );
+            push( @list, $aweb ) if ( Foswiki::Func::webExists( $aweb ) );
         }
     }
 
     my @items;
     my $indent = CGI::span( { class => 'foswikiWebIndent' }, '' );
-    foreach my $item (@list) {
+    foreach my $item ( @list ) {
         my $line = $format;
         $line =~ s/\$web\b/$web/g;
         $line =~ s/\$name\b/$item/g;
@@ -208,7 +193,9 @@ sub _EXTENDEDWEBLIST {
         $line =~ s/\$marker/$mark/g;
         push( @items, $line );
     }
-    return join( $separator, @items );
+    return join( $separator, @items );    
 }
+
+#>>>
 
 1;
